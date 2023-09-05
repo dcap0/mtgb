@@ -1,0 +1,9 @@
+include/
+Lib/
+Scripts/
+classic-land.png
+pyvenv.cfg
+scratch.py
+token.txt
+helpers/__pycache__
+PupperDeck.txt
