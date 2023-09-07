@@ -3,10 +3,14 @@ sys.path.append("..")
 from helpers.local_data import *
 
 
-def parse_deck_export_file(deck_data, format=Format.STANDARD) -> list:
-    deck_file = open(deck_data).readlines()
+def parse_deck_export_file(deck_file, format=Format.STANDARD) -> LocalDeck:
+    deck_file = open(deck_file).read().strip()
+    return parse_deck_str(deck_file)
+
+def parse_deck_str(deck_str: str, format=Format.STANDARD) -> LocalDeck:
+    deck_list = deck_str.strip().split('\n')
     deck = LocalDeck(format=format)
-    for card_str in deck_file[1:]:
+    for card_str in deck_list[1:]:
         name = card_name(card_str)
         deck.set_copies(name,card_copies(card_str))
         deck.append_card(
@@ -16,7 +20,6 @@ def parse_deck_export_file(deck_data, format=Format.STANDARD) -> list:
                     card_collector_number(card_str)
                 )   
         )
-
     return deck
 
 
