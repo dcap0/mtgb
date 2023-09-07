@@ -1,5 +1,6 @@
-from mtgsdk import Card
+from mtgsdk import Card, QueryBuilder
 from enum import Enum
+from typing import List, Dict
 # from helpers.local_data import CardParameters
 
 PLAINS = 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=295&type=card'
@@ -79,20 +80,39 @@ class CardParameters(str,Enum):
                 break
         return retval
     
-def purge_invalid_params(query_parameters: dict) -> dict:
+def get_mtgsdk_card_members() -> List[str]:
+    card = dir(Card())
+    members = []
+    for member in card:
+        if not callable(member) and not member.__contains__('__') and member != 'RESOURCE':
+            members.append(member)
+    return members
+
+def purge_invalid_params(query_parameters: Dict[str,str]) -> Dict[str,str]:
     ret_val = {}
     for key in query_parameters.keys():
         if CardParameters.is_valid(key):
             ret_val[key] = query_parameters[key]
     return ret_val
 
-def extract_flags_and_params(argv: list):
+def extract_flags_and_params(argv: list) -> tuple[List[str],Dict[str,str]]:
     flags_to_values = {}
+    return_card_values = []
     current_flag = ""
     for arg in argv:
         if '--' in arg:
             current_flag = arg.replace('--','')
-            flags_to_values[current_flag] = []
+            flags_to_values[current_flag] = ''
         else:
-            flags_to_values[current_flag] = arg
-    return purge_invalid_params(query_parameters=flags_to_values)
+            if current_flag == 'return':
+                return_card_values.append(arg)
+            else:
+                flags_to_values[current_flag] = arg
+
+    return (return_card_values,purge_invalid_params(query_parameters=flags_to_values))
+
+def find_card(parameters: dict) -> List[Card]:
+    query = QueryBuilder(Card)
+    for k,v in parameters.items():
+            query.where(**{k:v})
+    return query.all()
