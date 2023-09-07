@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
-from helpers import arena_deck_import_helper
-import asyncio
+from helpers import arena_deck_import_helper, mtgsdk_helper
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -29,6 +28,15 @@ async def file_data(ctx):
     for i in card_list:
         await ctx.channel.send(i)
     await ctx.channel.send("~~~~~~~~~~\nProcessing Complete!")
+
+@mtgb.command(name='get-full-card-data')
+async def get_full_card_data(ctx, *args):
+     parameters = mtgsdk_helper.extract_flags_and_params(argv=list(args))
+
+     for k,v in parameters.items():
+         print('{}: {}'.format(k,v))
+
+
         
 
 
