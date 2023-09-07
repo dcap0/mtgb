@@ -19,6 +19,17 @@ mtgb = commands.Bot(command_prefix='mtgb:', intents=intents)
     
 @mtgb.command(name="investigate-deck")
 async def invesitgate_deck(ctx):
+    '''Takes an MTG Arena Deck Export file and sends simple card data
+
+    Parses the deck file and sends user data formatted:
+    Name, Copies, Image Urls
+
+    Parameters
+    ----------
+    ctx : discord.ext.commands.Context
+        Message context received from Discord server.
+    
+    '''
     print("Received deck file data")
     await ctx.channel.send("Received {}".format(ctx.message.attachments[0].filename))
     await ctx.channel.send("Processing")
@@ -34,6 +45,15 @@ async def invesitgate_deck(ctx):
 
 @mtgb.command(name='get-card-data')
 async def get_card_data(ctx, *args):
+    '''Takes user provided query params and returns card data.
+    
+    Parameters
+    ----------
+    ctx : discord.ext.commands.Context
+        Message context received from Discord server.
+    *args : str
+        Variable number of flags and parameters provided via Discord message 
+    '''
     print("Received card query")
     await ctx.channel.send("Querying")
     await ctx.channel.send('======')
