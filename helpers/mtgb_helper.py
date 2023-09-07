@@ -1,8 +1,8 @@
 from mtgsdk import Card, QueryBuilder
 from enum import Enum
 from typing import List, Dict
-# from helpers.local_data import CardParameters
 
+#Constants for image links to basic Lands (incase they aren't present in response from mtgsdk)
 PLAINS = 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=295&type=card'
 SWAMP = 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=278&type=card'
 MOUNTAIN = 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=291&type=card'
@@ -10,6 +10,16 @@ ISLAND = 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=293&type
 FOREST = 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=289&type=card'
 
 def handle_lands(land_card: Card):
+    '''Ensures the Card object has an image url.
+
+    Matches against basic land names and sets a default image_url if there is none.
+
+    Parameters
+    ----------
+    land_card : mtgsdk.Card
+        Card object (Basic Land) to be checked for image_url
+    
+    '''
     match land_card.name:
         case "Forest":
             if land_card.image_url is None:
@@ -31,6 +41,9 @@ def handle_lands(land_card: Card):
 
 
 class CardParameters(str,Enum):
+    '''
+    Contains constant values for referencing mtgsdk.Card instance attributes.
+    '''
     NAME ='name'
     MULTIVERSE_ID ='multiverse_id'
     LAYOUT ='layout'
@@ -73,6 +86,18 @@ class CardParameters(str,Enum):
 
     @classmethod
     def is_valid(cls, query: str) -> bool:
+        '''Checks a string to see if it is a valid mtgsdk.Card attribute
+        
+        Parameters
+        ----------
+        query : str
+            The string to be matched agains the class attributes.
+
+        Return
+        ----------
+        bool
+            True if is a valid attribute. False otherwise.
+        '''
         retval = False
         for param in cls:
             if query.lower() == param.value:
@@ -81,6 +106,13 @@ class CardParameters(str,Enum):
         return retval
     
 def get_mtgsdk_card_members() -> List[str]:
+    '''Gets a list of attributes of an mtgsdk.Card instance.
+
+    Returns
+    ----------
+    List[str]
+        String list of all instance attributes of an mtgsdk.Card instance.
+    '''
     card = dir(Card())
     members = []
     for member in card:
@@ -89,6 +121,21 @@ def get_mtgsdk_card_members() -> List[str]:
     return members
 
 def purge_invalid_params(query_parameters: Dict[str,str]) -> Dict[str,str]:
+    '''Removes unexpeceted parameters from user input.
+
+    Matches parameters against CardParameters enum to ensure they are valid.
+
+    Parameters
+    ----------
+    query_parameters : Dict[str,str]
+        All of the user provided parameters after they have been mapped flag to arguments.
+
+    Returns
+    ----------
+    Dict[str,str]
+        Valid parameters mapped `name` of attribute to query param.
+
+    '''
     ret_val = {}
     for key in query_parameters.keys():
         if CardParameters.is_valid(key):
@@ -96,6 +143,16 @@ def purge_invalid_params(query_parameters: Dict[str,str]) -> Dict[str,str]:
     return ret_val
 
 def extract_flags_and_params(argv: list) -> tuple[List[str],Dict[str,str]]:
+    ''' Provides flags for data to return to the user.
+
+    Parses user provided flags. Takes any that have the `--` substring
+
+    Parameters
+    ----------
+    argv : list
+        The entire argument list that was passed to the bot command.
+    '''
+    
     flags_to_values = {}
     return_card_values = []
     current_flag = ""
@@ -112,6 +169,16 @@ def extract_flags_and_params(argv: list) -> tuple[List[str],Dict[str,str]]:
     return (return_card_values,purge_invalid_params(query_parameters=flags_to_values))
 
 def find_card(parameters: dict) -> List[Card]:
+    '''Generates a query for the mtgsdk with provided params.
+
+    Takes the provided paramaters and maps them to the kwargs in the QueryBuilder's
+    `.where()` method.
+
+    Parameters
+    ----------
+    parameters : dict
+        A mapping of mtgsdk.Card attribute name to user's desired values.
+    '''
     query = QueryBuilder(Card)
     for k,v in parameters.items():
             query.where(**{k:v})
