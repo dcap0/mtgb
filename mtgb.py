@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from helpers import arena_deck_import_helper, mtgsdk_helper
+from helpers import arena_deck_import_helper, mtgb_helper
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -17,9 +17,9 @@ mtgb = commands.Bot(command_prefix='mtgb:', intents=intents)
 #         await ctx.channel.send(i)
 #     await ctx.channel.send("~~~~~~~~~~\nProcessing Complete!")
     
-@mtgb.command(name="file-data")
-async def file_data(ctx):
-    print("Received File Data")
+@mtgb.command(name="investigate-deck")
+async def invesitgate_deck(ctx):
+    print("Received Deck File Data")
     await ctx.channel.send("Received {}".format(ctx.message.attachments[0].filename))
     await ctx.channel.send("Processing\n~~~~~~~~~~")
     deck_str = (await ctx.message.attachments[0].read()).decode('utf-8')
@@ -31,7 +31,7 @@ async def file_data(ctx):
 
 @mtgb.command(name='get-full-card-data')
 async def get_full_card_data(ctx, *args):
-     parameters = mtgsdk_helper.extract_flags_and_params(argv=list(args))
+     parameters = mtgb_helper.extract_flags_and_params(argv=list(args))
 
      for k,v in parameters.items():
          print('{}: {}'.format(k,v))
