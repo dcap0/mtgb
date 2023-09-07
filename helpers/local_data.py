@@ -102,7 +102,7 @@ class LocalDeck:
         """
         self.copies[name] = copies
 
-    def get_basic_deck_data(self) -> []:
+    def get_basic_card_list(self) -> list:
         """Compiles the deck data into a list where each item is the Name of the card, 
         how many copies, and the image url"""
         
