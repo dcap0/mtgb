@@ -8,3 +8,4 @@ token.txt
 helpers/__pycache__
 PupperDeck.txt
 mtgb.log
+.env
