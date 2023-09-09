@@ -45,8 +45,7 @@ Passing a command to the help command will give a more in depth breakdown of usa
 
 ## Authors
 
-Dennis Capone
-    [dcap0](https://github.com/dcap0)
+[Dennis Capone](https://github.com/dcap0)
 
 ## Version History
 
