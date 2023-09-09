@@ -182,4 +182,30 @@ def find_card(parameters: dict) -> List[Card]:
     query = QueryBuilder(Card)
     for k,v in parameters.items():
             query.where(**{k:v})
-    return query.all()
+    return filter_by_multiverse_id(query.all())
+
+def filter_by_multiverse_id(cards: List[Card]) -> List[Card]:
+    '''Filters out copies of cards returned by queries.
+
+    Filters cards via their multiverse_id
+
+    Parameters
+    ----------
+    cards : List[mtgsdk.Card]
+        List of cards returned by a query.
+    
+    Returns
+    ----------
+    List[mtgsdk.Card]
+        List of cards with duplicates filtered out.
+
+    '''
+    mid_set = set()
+    ret_val = []
+    for card in cards:
+        if card.multiverse_id is None:
+            break
+        if card.multiverse_id not in mid_set:
+            mid_set.add(card.multiverse_id)
+            ret_val.append(card)
+    return ret_val
