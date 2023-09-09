@@ -68,3 +68,4 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 * Allow user to save cards, then output an MTGA file to upload into the game.
   * Add database functionality? Mongo?
 * Maybe something with card rulings.
+* Containerize?
