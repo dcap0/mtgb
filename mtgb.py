@@ -111,7 +111,6 @@ async def get_card_data(ctx, *args):
         parameters = mtgb_helper.extract_flags_and_params(argv=list(args))
         return_list = parameters[0]
         cards = mtgb_helper.find_card(parameters[1])
-        print(len(cards))
         if len(return_list) == 0:
                 return_list = ['name', 'set','mana_cost','type','text','image_url']
         
