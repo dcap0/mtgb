@@ -208,4 +208,6 @@ def filter_by_multiverse_id(cards: List[Card]) -> List[Card]:
         if card.multiverse_id not in mid_set:
             mid_set.add(card.multiverse_id)
             ret_val.append(card)
+    if len(ret_val) == 0:
+        return cards
     return ret_val
