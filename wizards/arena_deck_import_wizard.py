@@ -1,6 +1,6 @@
 import sys
 sys.path.append("..")
-from helpers.local_data import *
+from wizards.local_data import *
 
 
 def parse_deck_export_file(deck_file, format=Format.STANDARD) -> LocalDeck:

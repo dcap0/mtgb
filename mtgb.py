@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from helpers import arena_deck_import_helper, mtgb_helper
+from wizards import arena_deck_import_wizard, mtgb_wizard
 import logging
 import traceback
 import os
@@ -23,7 +23,7 @@ logger = logging.getLogger('MTGB')
 # async def test(ctx):
 #     logger.info('Received')
 #     await ctx.channel.send('Processing\n~~~~~~~~~~')
-#     local_deck = arena_deck_import_helper.parse_deck_export_file('PupperDeck.txt')
+#     local_deck = arena_deck_import_wizard.parse_deck_export_file('PupperDeck.txt')
 #     card_list = local_deck.get_basic_card_list()
 #     for i in card_list:
 #         await ctx.channel.send(i)
@@ -60,7 +60,7 @@ async def invesitgate_deck(ctx):
             type=discord.ChannelType.public_thread
         )
         deck_str = (await ctx.message.attachments[0].read()).decode('utf-8')
-        local_deck = arena_deck_import_helper.parse_deck_str(deck_str)
+        local_deck = arena_deck_import_wizard.parse_deck_str(deck_str)
         card_list = local_deck.get_basic_card_list()
         for i in card_list:
             await thread.send(i)
@@ -108,9 +108,9 @@ async def get_card_data(ctx, *args):
         if not flags_present:
             await ctx.channel.send("======No flags passed. Please use `mtgb:help get-card-data` for info!======")
             return
-        parameters = mtgb_helper.extract_flags_and_params(argv=list(args))
+        parameters = mtgb_wizard.extract_flags_and_params(argv=list(args))
         return_list = parameters[0]
-        cards = mtgb_helper.find_card(parameters[1])
+        cards = mtgb_wizard.find_card(parameters[1])
         if len(return_list) == 0:
                 return_list = ['name', 'set','mana_cost','type','text','image_url']
         

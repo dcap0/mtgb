@@ -1,5 +1,5 @@
 from mtgsdk import Card
-from helpers.mtgb_helper import handle_lands
+from wizards.mtgb_wizard import handle_lands
 from enum import Enum
 
 
