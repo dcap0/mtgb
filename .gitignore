@@ -9,3 +9,6 @@ helpers/__pycache__
 PupperDeck.txt
 mtgb.log
 .env
+__pycache__
+wizards/__pycache__
+*.pyc
